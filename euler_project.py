@@ -17,7 +17,7 @@ def multiples_of_3_or_5(x: int = 1000) -> int:
     Find the sum of all the multiples of 3 or 5 below 1000.
 
     arguments:
-    x -- the length of the search list (default 10001)
+    x -- the range (default 1000)
     '''
     sum_3_5 = 0
     for i in range(x):
@@ -56,15 +56,15 @@ def get_factors(x: int = 600851475143) -> dict:
     arguments:
     x -- the considered number (default 600851475143)
     '''
-    dividers = {}
+    divisors = {}
     applicant = 2
-    while product(map(lambda kv: kv[0]**kv[1], dividers.items())) != x:
+    while product(map(lambda kv: kv[0]**kv[1], divisors.items())) != x:
         power = 0
-        while (x / product(map(lambda kv: kv[0]**kv[1], dividers.items()))) % applicant == 0:
+        while (x / product(map(lambda kv: kv[0]**kv[1], divisors.items()))) % applicant == 0:
             power += 1
-            dividers[applicant] = power
+            divisors[applicant] = power
         applicant += 1
-    return dividers
+    return divisors
 
 @time_execution
 def find_largest_palindrome(x: int = 3) -> int:
@@ -130,6 +130,8 @@ def sum_square_difference(x: int = 100) -> int:
 def x_st_prime_number(x: int = 10001) -> int:
     '''
     Problem 7:
+    By listing the first six prime numbers: 2, 3, 5, 7, 11, 13
+    we can see that the th prime is 13.
     What is the X-st prime number?
 
     arguments:
@@ -144,13 +146,13 @@ def x_st_prime_number(x: int = 10001) -> int:
     return prime_numbers[-1]
 
 @time_execution
-def largest_product_in_series(step: int = 13):
+def largest_product_in_series(x: int = 13):
     '''
     Problem 8:
     The four adjacent digits in the 1000-digit number that have the greatest product are 9 * 9 * 8 * 9 = 5832
 
     arguments:
-    x -- the length of the search list (default 13)
+    x -- the length of the series (default 13)
     '''
     matrix = '73167176531330624919225119674426574742355349194934'\
              '96983520312774506326239578318016984801869478851843'\
@@ -173,26 +175,168 @@ def largest_product_in_series(step: int = 13):
              '05886116467109405077541002256983155200055935729725'\
              '71636269561882670428252483600823257530420752963450'
 
+    return largest_product_matrix_series(matrix, matrix_demension=(50,20), step=x)
+
+@time_execution
+def special_pythagorean_triplet():
+    '''
+    Problem 9:
+    A Pythagorean triplet is a set of three natural numbers, a < b < c,
+    for which, a^2 + b^2 = c^2
+
+    For example, 3^2 + 4^2 = 5^2.
+
+    There exists exactly one Pythagorean triplet,
+    for which a + b + c = 1000.
+    Find the product abc.
+    '''
+    for a in range(1, 1000):
+        for b in range(1, 1000):
+            for c in range(1, 1000):
+                if a + b + c == 1000 \
+                   and \
+                   a ** 2 + b ** 2 == c ** 2:
+                    return a * b * c
+
+@time_execution
+def summation_of_primes(x: int = 2000000):
+    '''
+    Problem 10:
+    The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+    Find the sum of all the primes below X.
+
+    arguments:
+    x -- the search limit (default 2 000 000)
+    '''
+    number = 2
+    prime_numbers = []
+    while number < x:
+        if not is_there_div_in_list(number, prime_numbers):
+            prime_numbers.append(number)
+        number += 1
+    # TODO: it takes about 5 min (should be reworked)
+    return sum(prime_numbers)
+
+@time_execution
+def largest_product_in_grid(x: int = 4):
+    '''
+    Problem 11:
+    What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the grid?
+
+    arguments:
+    x -- the number of adjacent numbers (default = 4)
+    '''
+    matrix = '08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08 '\
+             '49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00 '\
+             '81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65 '\
+             '52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91 '\
+             '22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80 '\
+             '24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50 '\
+             '32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70 '\
+             '67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21 '\
+             '24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72 '\
+             '21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95 '\
+             '78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92 '\
+             '16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57 '\
+             '86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58 '\
+             '19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40 '\
+             '04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66 '\
+             '88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69 '\
+             '04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36 '\
+             '20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16 '\
+             '20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54 '\
+             '01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48'
+    return largest_product_matrix_series(matrix.split(' '), matrix_demension = (20, 20), step=4)
+
+@time_execution
+def highly_divisible_triangular_number(x: int = 50):
+    '''
+    Problem 12:
+    The sequence of triangle numbers is generated by adding the natural numbers.
+    So the th triangle number would be 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28.
+    The first ten terms would be: 1, 3, 6, 10, 15, 21, 28, 36, 45, 55
+
+    Let us list the factors of the first seven triangle numbers:
+    1: 1
+    3: 1, 3
+    6: 1, 2, 3, 6
+    10: 1, 2, 5, 10
+    15: 1, 3, 5, 15
+    21: 1, 3, 7, 21
+    28: 1, 2, 4, 7, 14, 28
+    We can see that 28 is the first triangle number to have over 5 divisors.
+
+    What is the value of the first triangle number to have over 500 divisors?
+
+    arguments:
+    x -- the number of divisors (default = 500)
+    '''
+
+    def sum_arith_progression(n: int, a1: int = 1, d: int = 1):
+        an = a1 + d * (n - 1)
+        summ = (a1 + an) * n / 2
+        return int(summ)
+
+    def get_divisors(x: int):
+        divisors = [ div for div in range(1, x + 1) if x % div == 0 ]
+        return divisors
+
+    n = 1
+    while len(get_divisors(sum_arith_progression(n))) < x:
+        n += 1
+    return n, sum_arith_progression(n), get_divisors(sum_arith_progression(n))
+
+def largest_product_matrix_series(matrix: Union[str, list], matrix_demension: tuple, step: int):
+    '''
+    Calculates the largest product in the series
+    '''
+
+    line_width = matrix_demension[0]
+
     def get_max_dict_products(dict_products):
         max_value = max(dict_products.values())
-        return list(dict_products.keys())[list(dict_products.values()).index(max_value)], max_value
+        max_value_key = list(dict_products.keys())[list(dict_products.values()).index(max_value)]
+        print(max_value, max_value_key)
+        return max_value, max_value_key
 
-    linear_products = {}
+    horizontal_products = {}
     for i in range(len(matrix) - step):
-        linear_products[f'{i} -> {i + step}: {matrix[i:i + step]}'] = product(f'{matrix[i:i + step]}')
-    return get_max_dict_products(linear_products)
+        horizontal_products[f'{matrix[i:i + step]}: {list(range(i, i + step))}'] = product(matrix[i:i + step])
 
-    # line_width = 50
-    # diagonal_products = {}
-    # for step_forward in range(len(matrix) - line_width * step - step):
-    #     diagonal_lr = ''
-    #     indexes = ''
-    #     for step_deep in range(step):
-    #         index = step_forward + line_width * step_deep + step_deep
-    #         diagonal_lr += matrix[index]
-    #         indexes += f'_{index}'
-    #     diagonal_products[f'{indexes}: {diagonal_lr}'] = product(diagonal_lr)
-    # print(get_max_dict_products(diagonal_products))
+    vertical_products = {}
+    for i in range(len(matrix) - line_width * step):
+        vertical = []
+        idxs = []
+        for j in range(step):
+            idx = i + line_width * j
+            vertical.append(matrix[idx])
+            idxs.append(idx)
+        vertical_products[f'{vertical}: {idxs}'] = product(vertical)
+
+    diag_lr_products = {}
+    for i in range(len(matrix) - line_width * step - step):
+        diagonal_lr = []
+        idxs = []
+        for j in range(step):
+            idx = i + line_width * j + j
+            diagonal_lr.append(matrix[idx])
+            idxs.append(idx)
+        diag_lr_products[f'{diagonal_lr}: {idxs}'] = product(diagonal_lr)
+
+    diag_rl_products = {}
+    for i in range(step - 1, len(matrix) - line_width * step):
+        diagonal_rl = []
+        idxs = []
+        for j in range(step):
+            idx = i + line_width * j - j
+            diagonal_rl.append(matrix[idx])
+            idxs.append(idx)
+        diag_rl_products[f'{diagonal_rl}: {idxs}'] = product(diagonal_rl)
+
+    return max(get_max_dict_products(horizontal_products)[0],
+               get_max_dict_products(vertical_products)[0],
+               get_max_dict_products(diag_lr_products)[0],
+               get_max_dict_products(diag_rl_products)[0])
 
 def is_there_div_in_list(applicant: int, numbers: list) -> bool:
     is_there_div = False
@@ -219,6 +363,12 @@ def is_palindrom(candidate: Union[int, str, list]) -> bool:
         id += 1
     return is_palindrom
 
+def success(msg):
+    print(f'SUCCESS:: {msg}')
+
+def error(msg):
+    print(f'ERROR:: {msg}')
+
 if __name__ == '__main__':
     print('Problem 1:', multiples_of_3_or_5())
     print('Problem 2:', even_fibonacci_numbers())
@@ -228,3 +378,7 @@ if __name__ == '__main__':
     print('Problem 6:', sum_square_difference())
     print('Problem 7:', x_st_prime_number())
     print('Problem 8:', largest_product_in_series())
+    print('Problem 9:', special_pythagorean_triplet())
+    # print('Problem 10:', summation_of_primes())
+    print('Problem 11:', largest_product_in_grid())
+    # print('Problem 12: ', highly_divisible_triangular_number())
